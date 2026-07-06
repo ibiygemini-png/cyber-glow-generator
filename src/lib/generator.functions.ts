@@ -24,16 +24,13 @@ export const sendPremiumLink = createServerFn({ method: "POST" })
     const url = `${API_BASE}/send?email=${encodeURIComponent(data.email)}&apikey=${encodeURIComponent(apiKey)}`;
     const res = await fetch(url);
     const text = await res.text();
-    let body: unknown;
+    let body: Record<string, any> = {};
     try {
       body = JSON.parse(text);
     } catch {
       body = { raw: text };
     }
-    if (!res.ok) {
-      return { ok: false, status: res.status, data: body };
-    }
-    return { ok: true, status: res.status, data: body };
+    return { ok: res.ok, status: res.status, data: body as Record<string, any> };
   });
 
 /** Step 2: verify link + on success log the generation. */
