@@ -44,7 +44,7 @@ export const verifyPremiumLink = createServerFn({ method: "POST" })
     const url = `${API_BASE}/verify?email=${encodeURIComponent(data.email)}&link=${encodeURIComponent(data.link)}&apikey=${encodeURIComponent(apiKey)}`;
     const res = await fetch(url);
     const text = await res.text();
-    let body: unknown;
+    let body: Record<string, any> = {};
     try {
       body = JSON.parse(text);
     } catch {
@@ -57,7 +57,6 @@ export const verifyPremiumLink = createServerFn({ method: "POST" })
         target_email: data.email,
         status: "success",
       });
-      return { ok: true, status: res.status, data: body };
     }
-    return { ok: false, status: res.status, data: body };
+    return { ok: res.ok, status: res.status, data: body as Record<string, any> };
   });
