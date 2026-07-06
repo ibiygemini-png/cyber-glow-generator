@@ -80,7 +80,7 @@ function Dashboard() {
     if (!validEmail) return toast.error(t("err_email_invalid"));
     setSending(true);
     try {
-      const r = await sendFn({ data: { email: targetEmail } });
+      const r = (await sendFn({ data: { email: targetEmail } })) as { ok: boolean; status: number; data: Record<string, any> };
       if (r.ok) toast.success(t("success_send"));
       else toast.error(readMsg(r.data) ?? t("err_generic"));
     } catch (e) {
@@ -96,7 +96,7 @@ function Dashboard() {
     if (!/^https?:\/\//.test(verifyLinkStr)) return toast.error(t("err_link_invalid"));
     setVerifying(true);
     try {
-      const r = await verifyFn({ data: { email: targetEmail, link: verifyLinkStr } });
+      const r = (await verifyFn({ data: { email: targetEmail, link: verifyLinkStr } })) as { ok: boolean; status: number; data: Record<string, any> };
       if (r.ok) {
         toast.success(t("success_verify"));
         qc.invalidateQueries({ queryKey: ["total-generated"] });
